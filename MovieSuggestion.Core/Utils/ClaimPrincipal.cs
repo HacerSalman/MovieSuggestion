@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using MovieSuggestion.Data.Utils.MovieSuggestion.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -39,7 +40,7 @@ namespace MovieSuggestion.Core.Utils
         }
         public static string GenerateToken(string NameIdentifier,  List<string> Permissions)
         {
-            var signingKey = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("MOVIE_SUGGESTION_JWT_KEY"));
+            var signingKey = Encoding.UTF8.GetBytes(EnvironmentVariable.GetConfiguration().JwtKey);
 
             var claims = new List<Claim>
             {
@@ -54,7 +55,7 @@ namespace MovieSuggestion.Core.Utils
 
             var creds = new SigningCredentials(new SymmetricSecurityKey(signingKey), SecurityAlgorithms.HmacSha256);
             var expires = DateTime.Now.AddHours(1);
-            var token = new JwtSecurityToken("MovieSuggestionApp", "MovieSuggestionAppClients", claims,
+            var token = new JwtSecurityToken(EnvironmentVariable.GetConfiguration().JwtValidIssuer, EnvironmentVariable.GetConfiguration().JwtValidAudience, claims,
                 expires: expires,
                 signingCredentials: creds);
 

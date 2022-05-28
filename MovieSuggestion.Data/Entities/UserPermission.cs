@@ -22,8 +22,9 @@ namespace MovieSuggestion.Data.Entities
         [Column("permission", TypeName = "VARCHAR(32)")]
         public Permission.Values Permission { get; set; }
 
-        internal static void FluentInitAndSeed(ModelBuilder modelBuilder, EnumToStringConverter<Permission.Values> permissionConverter)
+        internal static void FluentInitAndSeed(ModelBuilder modelBuilder, EnumToStringConverter<EntityStatus.Values> statusConverter, EnumToStringConverter<Permission.Values> permissionConverter)
         {
+            FluentInit<UserPermission>(modelBuilder, statusConverter);
             modelBuilder.Entity<UserPermission>(entity =>
             {
                 entity.HasKey(e => e.Id);

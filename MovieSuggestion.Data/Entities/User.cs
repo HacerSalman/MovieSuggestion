@@ -21,7 +21,7 @@ namespace MovieSuggestion.Data.Entities
 
         [Column("username")]
         [StringLength(36)]
-        public Guid Username { set { value = Guid.NewGuid(); } }
+        public Guid Username { get; set; }
 
         [Column("email")]
         [StringLength(36)]
@@ -33,11 +33,12 @@ namespace MovieSuggestion.Data.Entities
 
         internal static void FluentInitAndSeed(ModelBuilder modelBuilder, EnumToStringConverter<EntityStatus.Values> statusConverter)
         {
-            FluentInit<Movie>(modelBuilder, statusConverter);
-            modelBuilder.Entity<Movie>(entity =>
+            FluentInit<User>(modelBuilder, statusConverter);
+            modelBuilder.Entity<User>(entity =>
             {
                 entity.HasIndex(e => e.Name);
-                entity.HasIndex(e => e.Score);
+                entity.HasIndex(e => e.Email).IsUnique(true);
+                entity.HasAlternateKey(e => e.Username);
             });
         }
     }

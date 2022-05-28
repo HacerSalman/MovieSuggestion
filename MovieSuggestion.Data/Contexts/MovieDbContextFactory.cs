@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using MovieSuggestion.Data.Utils.MovieSuggestion.Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace MovieSuggestion.Data.Contexts
         public MovieDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<MovieDbContext>();
-            var connString = Environment.GetEnvironmentVariable("MOVIE_SUGGESTION_DB_CONNECTION");
+            var connString = EnvironmentVariable.GetConfiguration().DbConnection;
             ServerVersion sv = ServerVersion.AutoDetect(connString);
             optionsBuilder.UseMySql(connString, sv);
             optionsBuilder.EnableSensitiveDataLogging();

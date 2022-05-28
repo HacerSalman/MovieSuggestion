@@ -17,7 +17,6 @@ namespace MovieSuggestion.Data.Entities
         public ulong Id { get; set; }
 
         [Column("status", TypeName = "VARCHAR(32)")]
-        [Display(Name = "STATUS")]
         public EntityStatus.Values Status { get; set; }
 
         [Column("create_time")]

@@ -20,8 +20,7 @@ namespace MovieSuggestion.Data.Enums
         public enum Values
         {
             USER_MANAGE,
-            MOVIE_READ,
-            MOVIE_WRITE,
+            MOVIE_MANAGE,
             MOVIE_DELETE
         }
 

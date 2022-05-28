@@ -34,7 +34,7 @@ namespace MovieSuggestion.Data.Contexts
             User.FluentInitAndSeed(modelBuilder, statusConverter);
             UserMovie.FluentInitAndSeed(modelBuilder, statusConverter);
             UserMovieNote.FluentInitAndSeed(modelBuilder, statusConverter);
-            UserPermission.FluentInitAndSeed(modelBuilder, permissionConverter);
+            UserPermission.FluentInitAndSeed(modelBuilder, statusConverter, permissionConverter);
         }
     }
 }
