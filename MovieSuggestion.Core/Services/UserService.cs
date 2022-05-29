@@ -1,5 +1,5 @@
 ﻿using MovieSuggestion.Core.Resources;
-using MovieSuggestion.Core.UnitOfWork;
+using MovieSuggestion.Core.UnitOfWorks;
 using MovieSuggestion.Core.Utils;
 using MovieSuggestion.Data.Entities;
 using MovieSuggestion.Data.Enums;

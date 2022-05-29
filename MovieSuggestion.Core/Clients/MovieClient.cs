@@ -1,0 +1,117 @@
+﻿using Microsoft.Extensions.Caching.Memory;
+using MovieSuggestion.Data.Utils.MovieSuggestion.Core.Utils;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MovieSuggestion.Core.Clients
+{
+    public class MovieClient
+    {
+        private readonly HttpClient _client = null;
+        private readonly string apiKey = EnvironmentVariable.GetConfiguration().MovieClientApiKey;
+
+        public MovieClient(HttpClient client)
+        {
+            _client = client;
+        }
+
+        public async Task<T> SendAndReceiveJson<T>(string endPoint, Dictionary<string, string> input) where T : MovieClientBaseResponse
+        {
+            try
+            {
+                var contractResolver = new DefaultContractResolver { NamingStrategy = new CamelCaseNamingStrategy() };
+                HttpResponseMessage response;
+                switch (endPoint)
+                {                    
+                    case MovieClientEndpoints.ListLatest:
+                        string query;
+                        input.Add("api_key", apiKey);
+                        using (var content = new FormUrlEncodedContent(input))
+                        {
+                            query = content.ReadAsStringAsync().Result;
+                        }
+                        var uri = new Uri(EnvironmentVariable.GetConfiguration().MovieClientBaseUrl + endPoint + "?" + query);
+                        response = await _client.GetAsync(uri);
+                        break;
+                    
+                    default:
+                        throw new InvalidOperationException();
+                }
+                var result = await response.Content.ReadAsStringAsync();
+               return JsonConvert.DeserializeObject<T>(result, new JsonSerializerSettings() { ContractResolver = contractResolver });
+                
+            }
+            catch (Exception)
+            {          
+                throw;
+            }
+        }
+
+        public async Task<MovieClientBaseResponse> ListLatest(Dictionary<string, string> input)
+        {
+            return await SendAndReceiveJson<MovieClientBaseResponse>(MovieClientEndpoints.ListLatest, input);
+        }
+        public static class MovieClientEndpoints
+        {
+            public const string ListLatest = "movie/latest";
+        }
+
+        public class MovieClientBaseResponse
+        {
+            [JsonProperty("page")]
+            public int Page { get; set; }
+
+            [JsonProperty("total_results")]
+            public int TotalResults { get; set; }
+
+            [JsonProperty("total_pages")]
+            public int TotalPages { get; set; }
+
+            [JsonProperty("results")]
+            public List<MovieList> Results { get; set; }
+        }
+
+        public class MovieList
+        {
+            [JsonProperty("title")]
+            public string Title { get; set; }
+
+            [JsonProperty("original_title")]
+            public string OriginalTitle { get; set; }
+
+            [JsonProperty("overview")]
+            public string Overview { get; set; }
+
+            [JsonProperty("score")]
+            public double Score { get; set; }
+
+            [JsonProperty("adult")]
+            public bool Adult { get; set; }
+
+            [JsonProperty("backdrop_path")]
+            public string BackdropPath { get; set; }
+
+            [JsonProperty("id")]
+            public long Id { get; set; }
+
+            [JsonProperty("original_language")]
+            public string OriginalLanguage { get; set; }
+
+            [JsonProperty("popularity")]
+            public double Popularity { get; set; }
+
+            [JsonProperty("poster_path")]
+            public string PosterPath { get; set; }
+
+
+            [JsonProperty("video")]
+            public bool Video { get; set; }
+        }
+    }
+}

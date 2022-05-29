@@ -17,5 +17,6 @@ namespace MovieSuggestion.Core.Services
         Task<Movie> CreateMovie(Movie newMovie);
         Task<Movie> UpdateMovie(Movie movie);
         Task<Movie> DeleteMovie(Movie movie);
+        Task GetMovieListFromClient();
     }
 }

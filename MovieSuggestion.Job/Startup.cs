@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MovieSuggestion.Core.Utils;
+using MovieSuggestion.Data.Contexts;
 using MovieSuggestion.Data.Utils.MovieSuggestion.Core.Utils;
 using MovieSuggestion.Job.Hangfire;
 using System;
@@ -35,6 +37,8 @@ namespace MovieSuggestion.Job
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             var connString = EnvironmentVariable.GetConfiguration().DbConnection;
+            ServerVersion sv = ServerVersion.AutoDetect(connString);
+            services.AddDbContext<MovieDbContext>(options => options.UseMySql(connString, sv), ServiceLifetime.Scoped);
             services.AddEntityFrameworkMySql();
            
 
@@ -51,6 +55,7 @@ namespace MovieSuggestion.Job
             services.AddHangfireServer();
             services.AddControllers();
             services.AddHttpContextAccessor();
+            services.AddDIRegister();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

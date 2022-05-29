@@ -1,5 +1,6 @@
-﻿using MovieSuggestion.Core.Models;
-using MovieSuggestion.Core.UnitOfWork;
+﻿using MovieSuggestion.Core.Clients;
+using MovieSuggestion.Core.Models;
+using MovieSuggestion.Core.UnitOfWorks;
 using MovieSuggestion.Data.Entities;
 using MovieSuggestion.Data.Enums;
 using System;
@@ -16,6 +17,7 @@ namespace MovieSuggestion.Core.Services
         public MovieService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+       
         }
         public async Task<Movie> CreateMovie(Movie newMovie)
         {
@@ -57,6 +59,7 @@ namespace MovieSuggestion.Core.Services
             return await _unitOfWork.Movies.GetByIdAsync(id);
         }
 
+
         public async Task<PagedResponse<Movie>> GetMoviesByTitle(string title, int? Skip, int? Take)
         {
             var query = _unitOfWork.Movies.Find(_ => _.Title.Contains(title));
@@ -72,6 +75,16 @@ namespace MovieSuggestion.Core.Services
             await _unitOfWork.Movies.Update(movie);
             await _unitOfWork.CommitAsync();
             return movie;
+        }
+
+        public async Task GetMovieListFromClient()
+        {
+            var input = new Dictionary<string, string>();
+            input.Add("page", "1");
+          
+            await _unitOfWork.MovieClients.ListLatest(input);
+
+            
         }
     }
 }

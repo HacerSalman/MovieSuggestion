@@ -34,6 +34,8 @@ namespace MovieSuggestion.Data.Utils
             public string JwtValidAudience { get; private set; }
             public string HangfireUserName { get; private set; }
             public string HangfireUserPassword { get; private set; }
+            public string MovieClientApiKey { get; private set; }
+            public string MovieClientBaseUrl { get; private set; }
 
             private static void LoadConfiguration()
             {
@@ -43,6 +45,8 @@ namespace MovieSuggestion.Data.Utils
                 GetConfiguration().JwtValidAudience = Environment.GetEnvironmentVariable("MOVIE_SUGGESTION_VALID_AUDIENCE");
                 GetConfiguration().HangfireUserName = Environment.GetEnvironmentVariable("MOVIE_SUGGESTION_HANGFIRE_USERNAME");
                 GetConfiguration().HangfireUserPassword = Environment.GetEnvironmentVariable("MOVIE_SUGGESTION_HANGFIRE_PASSWORD");
+                GetConfiguration().MovieClientBaseUrl = Environment.GetEnvironmentVariable("MOVIE_CLIENT_BASE_URL");
+                GetConfiguration().MovieClientApiKey = Environment.GetEnvironmentVariable("MOVIE_CLIENT_API_KEY");
             }
         }
     }

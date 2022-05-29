@@ -14,12 +14,12 @@ namespace MovieSuggestion.Data.Entities
     public class UserMovie : BaseEntity
     {
         [Column("user_id")]
-        public long UserId { get; set; }
+        public ulong UserId { get; set; }
 
         public User User { get; set; }
 
         [Column("movie_id")]
-        public long MovieId { get; set; }
+        public ulong MovieId { get; set; }
 
         public Movie Movie { get; set; }
 

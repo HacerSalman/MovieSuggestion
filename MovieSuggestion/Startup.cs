@@ -12,7 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MovieSuggestion.Core.Services;
-using MovieSuggestion.Core.UnitOfWork;
+using MovieSuggestion.Core.UnitOfWorks;
+using MovieSuggestion.Core.Utils;
 using MovieSuggestion.Data.Contexts;
 using MovieSuggestion.Data.Utils.MovieSuggestion.Core.Utils;
 using System;
@@ -40,9 +41,7 @@ namespace MovieSuggestion
             var connString = EnvironmentVariable.GetConfiguration().DbConnection;
             ServerVersion sv = ServerVersion.AutoDetect(connString);
             services.AddDbContext<MovieDbContext>(options => options.UseMySql(connString, sv), ServiceLifetime.Scoped);
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IMovieService, MovieService>();
-            services.AddScoped<IUserService, UserService>();
+       
 
             services.AddAuthentication(options =>
             {
@@ -90,6 +89,7 @@ namespace MovieSuggestion
                 });
             });
             services.AddHttpContextAccessor();
+            services.AddDIRegister();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

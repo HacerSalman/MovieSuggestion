@@ -26,7 +26,10 @@ namespace MovieSuggestion.Job.Hangfire
             RecurringJob.RemoveIfExists(nameof(SuccessLogJob));
             RecurringJob.AddOrUpdate<SuccessLogJob>(nameof(SuccessLogJob), job => job.Process(), Cron.Daily);
 
-           
+            RecurringJob.RemoveIfExists(nameof(MovieListJob));
+            RecurringJob.AddOrUpdate<MovieListJob>(nameof(MovieListJob), job => job.Process(), "* */5 * * * *");
+
+
         }
     }
 }
