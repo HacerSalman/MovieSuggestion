@@ -14,6 +14,8 @@ namespace MovieSuggestion.Core.UnitOfWorks
         IRepository<User> Users { get; }
         IRepository<Movie> Movies { get; }
         IRepository<UserPermission> UserPermissions { get; }
+        IRepository<UserMovie> UserMovies { get; }
+        IRepository<UserMovieNote> UserMovieNotes { get; }
         MovieClient MovieClients { get; }
         Task<int> CommitAsync();
     }

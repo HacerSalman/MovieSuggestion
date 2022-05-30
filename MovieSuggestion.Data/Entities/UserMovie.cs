@@ -26,6 +26,8 @@ namespace MovieSuggestion.Data.Entities
         [Column("score")]
         public double Score { get; set; }
 
+        [NotMapped]
+        public List<string> NoteList { get; set; }
 
         internal static void FluentInitAndSeed(ModelBuilder modelBuilder, EnumToStringConverter<EntityStatus.Values> statusConverter)
         {

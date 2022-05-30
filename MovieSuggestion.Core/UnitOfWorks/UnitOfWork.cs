@@ -22,6 +22,8 @@ namespace MovieSuggestion.Core.UnitOfWorks
         private Repository<User> _userRepository;
         private Repository<Movie> _movieRepository;
         private Repository<UserPermission> _userPermissionRepository;
+        private Repository<UserMovie> _userMovieRepository;
+        private Repository<UserMovieNote> _userMovieNoteRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UnitOfWork(MovieDbContext context, MovieClient movieClient, IHttpContextAccessor httpContextAccessor)
@@ -33,9 +35,11 @@ namespace MovieSuggestion.Core.UnitOfWorks
         public IRepository<User> Users => _userRepository = _userRepository ?? new Repository<User>(_context, _httpContextAccessor);
         public IRepository<Movie> Movies => _movieRepository = _movieRepository ?? new Repository<Movie>(_context, _httpContextAccessor);
         public MovieClient MovieClients => _movieClient = _movieClient ?? new MovieClient(new System.Net.Http.HttpClient());
-
         public IRepository<UserPermission> UserPermissions => _userPermissionRepository = _userPermissionRepository ?? new Repository<UserPermission>(_context, _httpContextAccessor);
 
+        public IRepository<UserMovie> UserMovies => _userMovieRepository = _userMovieRepository ?? new Repository<UserMovie>(_context, _httpContextAccessor);
+
+        public IRepository<UserMovieNote> UserMovieNotes => _userMovieNoteRepository = _userMovieNoteRepository ?? new Repository<UserMovieNote>(_context, _httpContextAccessor);
         public async Task<int> CommitAsync()
         {          
          
