@@ -40,8 +40,12 @@ namespace MovieSuggestion
             services.AddControllers();
             var connString = EnvironmentVariable.GetConfiguration().DbConnection;
             ServerVersion sv = ServerVersion.AutoDetect(connString);
-            services.AddDbContext<MovieDbContext>(options => options.UseMySql(connString, sv), ServiceLifetime.Scoped);
-       
+            services.AddDbContextPool<MovieDbContext>((serviceProvider, optionsBuilder) =>
+            {
+                optionsBuilder.UseMySql(connString, sv);
+                optionsBuilder.UseInternalServiceProvider(serviceProvider);
+            });
+
 
             services.AddAuthentication(options =>
             {
@@ -90,6 +94,7 @@ namespace MovieSuggestion
             });
             services.AddHttpContextAccessor();
             services.AddDIRegister();
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

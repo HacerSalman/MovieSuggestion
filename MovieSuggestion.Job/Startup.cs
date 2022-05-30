@@ -38,7 +38,11 @@ namespace MovieSuggestion.Job
 
             var connString = EnvironmentVariable.GetConfiguration().DbConnection;
             ServerVersion sv = ServerVersion.AutoDetect(connString);
-            services.AddDbContext<MovieDbContext>(options => options.UseMySql(connString, sv), ServiceLifetime.Scoped);
+            services.AddDbContextPool<MovieDbContext>((serviceProvider, optionsBuilder) =>
+            {
+                optionsBuilder.UseMySql(connString,sv);
+                optionsBuilder.UseInternalServiceProvider(serviceProvider);
+            });
             services.AddEntityFrameworkMySql();
            
 

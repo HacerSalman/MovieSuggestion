@@ -21,7 +21,7 @@ namespace MovieSuggestion.Core.Clients
             _client = client;
         }
 
-        public async Task<T> SendAndReceiveJson<T>(string endPoint, Dictionary<string, string> input) where T : MovieClientBaseResponse
+        public T SendAndReceiveJson<T>(string endPoint, Dictionary<string, string> input) where T : MovieClientBaseResponse
         {
             try
             {
@@ -29,7 +29,7 @@ namespace MovieSuggestion.Core.Clients
                 HttpResponseMessage response;
                 switch (endPoint)
                 {                    
-                    case MovieClientEndpoints.ListLatest:
+                    case MovieClientEndpoints.ListNowPlaying:
                         string query;
                         input.Add("api_key", apiKey);
                         using (var content = new FormUrlEncodedContent(input))
@@ -37,13 +37,13 @@ namespace MovieSuggestion.Core.Clients
                             query = content.ReadAsStringAsync().Result;
                         }
                         var uri = new Uri(EnvironmentVariable.GetConfiguration().MovieClientBaseUrl + endPoint + "?" + query);
-                        response = await _client.GetAsync(uri);
+                        response =  _client.GetAsync(uri).Result;
                         break;
                     
                     default:
                         throw new InvalidOperationException();
                 }
-                var result = await response.Content.ReadAsStringAsync();
+                var result =  response.Content.ReadAsStringAsync().Result;
                return JsonConvert.DeserializeObject<T>(result, new JsonSerializerSettings() { ContractResolver = contractResolver });
                 
             }
@@ -53,13 +53,13 @@ namespace MovieSuggestion.Core.Clients
             }
         }
 
-        public async Task<MovieClientBaseResponse> ListLatest(Dictionary<string, string> input)
+        public MovieClientBaseResponse ListNowPlaying(Dictionary<string, string> input)
         {
-            return await SendAndReceiveJson<MovieClientBaseResponse>(MovieClientEndpoints.ListLatest, input);
+            return  SendAndReceiveJson<MovieClientBaseResponse>(MovieClientEndpoints.ListNowPlaying, input);
         }
         public static class MovieClientEndpoints
         {
-            public const string ListLatest = "movie/latest";
+            public const string ListNowPlaying = "movie/now_playing";
         }
 
         public class MovieClientBaseResponse

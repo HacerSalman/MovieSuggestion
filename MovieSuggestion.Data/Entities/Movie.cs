@@ -73,6 +73,7 @@ namespace MovieSuggestion.Data.Entities
             {              
                 entity.HasIndex(e => e.Title);
                 entity.HasIndex(e => e.Score);
+                entity.HasIndex(e => e.SourceId).IsUnique();
             });
         }
     }

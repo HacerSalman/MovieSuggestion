@@ -8,5 +8,10 @@ namespace MovieSuggestion.Core.DTO
 {
     public class UserMovieUpdateDTO
     {
+        public ulong UserId { get; set; }
+
+        public ulong MovieId { get; set; }
+
+        public double Score { get; set; }
     }
 }

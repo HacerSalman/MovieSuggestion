@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieSuggestion.Data.Entities;
 using MovieSuggestion.Data.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MovieSuggestion.Data.Contexts
 {
@@ -18,7 +13,7 @@ namespace MovieSuggestion.Data.Contexts
         public DbSet<UserPermission> UserPermissions { get; set; }
         public MovieDbContext(DbContextOptions<MovieDbContext> options) : base(options)
         {
-
+            Database.SetCommandTimeout(9000);
         }
 
 

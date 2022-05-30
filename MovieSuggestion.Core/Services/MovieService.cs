@@ -17,7 +17,7 @@ namespace MovieSuggestion.Core.Services
         public MovieService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-       
+
         }
         public async Task<Movie> CreateMovie(Movie newMovie)
         {
@@ -36,7 +36,7 @@ namespace MovieSuggestion.Core.Services
 
         public async Task<PagedResponse<Movie>> GetActiveMovies(int? Skip, int? Take)
         {
-            var query =  _unitOfWork.Movies.Find(_ => _.Status == EntityStatus.Values.ACTIVE);
+            var query = _unitOfWork.Movies.Find(_ => _.Status == EntityStatus.Values.ACTIVE);
             return new PagedResponse<Movie>()
             {
                 Result = await Task.FromResult(query.Skip(Skip ?? 0).Take(Take ?? 20).ToList()),
@@ -77,14 +77,63 @@ namespace MovieSuggestion.Core.Services
             return movie;
         }
 
-        public async Task GetMovieListFromClient()
+        public void GetMovieListFromClient()
         {
-            var input = new Dictionary<string, string>();
-            input.Add("page", "1");
-          
-            await _unitOfWork.MovieClients.ListLatest(input);
+            var totalPages = 100;
+            for (var page = 1; page <= totalPages; page++)
+            {
+                var input = new Dictionary<string, string>();
+                input.Add("page", page.ToString());
+                var movieList =  _unitOfWork.MovieClients.ListNowPlaying(input);
+                if (movieList == null)
+                    break;
+                if (movieList.TotalPages < totalPages)
+                    totalPages = movieList.TotalPages;
+                 SaveMovieListToDB(movieList.Results);
+            }
 
-            
         }
+
+        private void SaveMovieListToDB(List<MovieClient.MovieList> results)
+        {
+            var movieList = results.Select(m => new Movie()
+            {
+                Adult = m.Adult,
+                BackdropPath = m.BackdropPath,
+                OriginalLanguage = m.OriginalLanguage,
+                OriginalTitle = m.OriginalTitle,
+                Overview = m.Overview,
+                Popularity = m.Popularity,
+                PosterPath = m.PosterPath,
+                Score = m.Score,
+                SourceId = m.Id,
+                Status = EntityStatus.Values.ACTIVE,
+                Title = m.Title,
+                Video = m.Video
+            }).ToList();
+
+            foreach (var movie in movieList)
+            {
+                try
+                {
+                    var mv = _unitOfWork.Movies.Find(m => m.SourceId == movie.SourceId).FirstOrDefault();
+                    if (mv != null)
+                         _unitOfWork.Movies.Update(movie);
+                    else
+                         _unitOfWork.Movies.AddAsync(movie);
+
+                    _unitOfWork.CommitAsync();
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+             
+            }
+
+           
+        }
+
     }
 }

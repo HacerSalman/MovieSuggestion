@@ -36,6 +36,9 @@ namespace MovieSuggestion.Data.Utils
             public string HangfireUserPassword { get; private set; }
             public string MovieClientApiKey { get; private set; }
             public string MovieClientBaseUrl { get; private set; }
+            public string MailFrom { get; private set; }
+            public string SmtpHost { get; private set; }
+            public string SmtpPass { get; private set; }
 
             private static void LoadConfiguration()
             {
@@ -47,6 +50,9 @@ namespace MovieSuggestion.Data.Utils
                 GetConfiguration().HangfireUserPassword = Environment.GetEnvironmentVariable("MOVIE_SUGGESTION_HANGFIRE_PASSWORD");
                 GetConfiguration().MovieClientBaseUrl = Environment.GetEnvironmentVariable("MOVIE_CLIENT_BASE_URL");
                 GetConfiguration().MovieClientApiKey = Environment.GetEnvironmentVariable("MOVIE_CLIENT_API_KEY");
+                GetConfiguration().MailFrom = Environment.GetEnvironmentVariable("MOVIE_SUGGESTION_MAIL_FROM");
+                GetConfiguration().SmtpHost = Environment.GetEnvironmentVariable("MOVIE_SUGGESTION_SMTP_HOST");
+                GetConfiguration().SmtpPass = Environment.GetEnvironmentVariable("MOVIE_SUGGESTION_SMTP_PASS");
             }
         }
     }
