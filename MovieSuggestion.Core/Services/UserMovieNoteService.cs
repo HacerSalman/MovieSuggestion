@@ -54,9 +54,9 @@ namespace MovieSuggestion.Core.Services
             };
         }
 
-        public async Task<List<string>> GetUserMovieNotesByMovieId(ulong movieId)
+        public async Task<List<string>> GetUserMovieNotesByMovieId(ulong userId, ulong movieId)
         {
-            return await Task.FromResult(_unitOfWork.UserMovieNotes.Find(_ => _.MovieId == movieId).Select(_=> _.Note).ToList());
+            return await Task.FromResult(_unitOfWork.UserMovieNotes.Find(_ => _.MovieId == movieId && _.UserId == userId).Select(_=> _.Note).ToList());
         }
 
         public async Task<UserMovieNote> UpdateUserMovieNote(UserMovieNote userMovieNote)

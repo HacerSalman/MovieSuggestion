@@ -51,7 +51,6 @@ namespace MovieSuggestion.Job
             });
             services.AddHangfireServer();
             services.AddControllers();
-            services.AddHttpContextAccessor();
             services.AddDIRegister();
         }
 
@@ -92,8 +91,7 @@ namespace MovieSuggestion.Job
            
 
             GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 });
-
-            // Tanýmlanan zaman diliminde sürekli çalýþtýðý için tetiklenmesine gerek yok, burada tanýmlayabiliriz.  
+ 
             RecurringJobs.TaskOperations();
         }
     }
