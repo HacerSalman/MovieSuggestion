@@ -11,7 +11,7 @@ namespace MovieSuggestion.Core.DTO
     {
         public ulong UserId { get; set; }
         public MovieDTO Movie { get; set; }
-        public double Score { get; set; }
+        public double UserScore { get; set; }
         public List<string> NoteList { get; set; }
     }
 }

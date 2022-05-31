@@ -77,5 +77,14 @@ namespace MovieSuggestion.Core.Resources {
                 return ResourceManager.GetString("INCORRECT_PASSWORD", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username or password incorrect!.
+        /// </summary>
+        public static string USERNAME_OR_PASSWORD_INCORRECT {
+            get {
+                return ResourceManager.GetString("USERNAME_OR_PASSWORD_INCORRECT", resourceCulture);
+            }
+        }
     }
 }

@@ -19,10 +19,6 @@ namespace MovieSuggestion.Data.Entities
         [Required]
         public string Name { get; set; }
 
-        [Column("username")]
-        [StringLength(36)]
-        public Guid Username { get; set; }
-
         [Column("email")]
         [StringLength(36)]
         public string Email { get; set; }
@@ -38,7 +34,6 @@ namespace MovieSuggestion.Data.Entities
             {
                 entity.HasIndex(e => e.Name);
                 entity.HasIndex(e => e.Email).IsUnique(true);
-                entity.HasAlternateKey(e => e.Username);
             });
         }
     }

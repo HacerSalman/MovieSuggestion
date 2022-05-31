@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieSuggestion.Data.Entities;
 using MovieSuggestion.Data.Enums;
+using System.Linq;
 
 namespace MovieSuggestion.Data.Contexts
 {
@@ -30,6 +31,30 @@ namespace MovieSuggestion.Data.Contexts
             UserMovie.FluentInitAndSeed(modelBuilder, statusConverter);
             UserMovieNote.FluentInitAndSeed(modelBuilder, statusConverter);
             UserPermission.FluentInitAndSeed(modelBuilder, statusConverter, permissionConverter);
+        }
+
+        public override int SaveChanges()
+        {
+            var result = base.SaveChanges();
+            OnAfterSaveChanges();
+            return result;
+        }
+
+        private void OnAfterSaveChanges()
+        {
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                //When score of usermovie update or create then calculate the score of the movie
+                if (entry.Entity is UserMovie)
+                {
+                    var userMovie = (UserMovie)entry.Entity;
+                    var movie = Movies.Find(userMovie.MovieId);
+                    if (movie != null)
+                        movie.Score = UserMovies.Where(_ => _.Status == EntityStatus.Values.ACTIVE).AverageAsync(_ => _.Score).Result;
+         
+                }
+
+            }
         }
     }
 }

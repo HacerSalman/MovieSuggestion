@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace MovieSuggestion.Core.DTO
 {
-    public class UserMovieUpdateDTO
+    public class LoginDTO
     {
-        public ulong UserId { get; set; }
-
-        public ulong MovieId { get; set; }
-
-        public double Score { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

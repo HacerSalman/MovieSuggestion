@@ -32,7 +32,11 @@ namespace MovieSuggestion.Core.Repositories
 
         public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
-            OnBeforeCreate(entities as BaseEntity); //todo
+            foreach (var entity in entities)
+            {
+                OnBeforeCreate(entity as BaseEntity);
+            }
+          
             await context.Set<TEntity>().AddRangeAsync(entities);
         }
 

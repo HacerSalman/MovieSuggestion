@@ -1,6 +1,7 @@
 ﻿using MovieSuggestion.Core.Clients;
 using MovieSuggestion.Core.Models;
 using MovieSuggestion.Core.UnitOfWorks;
+using MovieSuggestion.Core.Utils;
 using MovieSuggestion.Data.Entities;
 using MovieSuggestion.Data.Enums;
 using System;
@@ -135,5 +136,19 @@ namespace MovieSuggestion.Core.Services
            
         }
 
+        public bool SuggestMovie(string mailTo, string subject, string body)
+        {
+            try
+            {
+                MailUtils.SendMail(subject, body, mailTo);
+                return true;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+          
+        }
     }
 }

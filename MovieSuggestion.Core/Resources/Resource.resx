@@ -123,4 +123,7 @@
   <data name="INCORRECT_PASSWORD" xml:space="preserve">
     <value>Incorrect pasword!</value>
   </data>
+  <data name="USERNAME_OR_PASSWORD_INCORRECT" xml:space="preserve">
+    <value>Username or password incorrect!</value>
+  </data>
 </root>

@@ -13,6 +13,5 @@ namespace MovieSuggestion.Core.DTO
         public ulong MovieId { get; set; }
 
         public double Score { get; set; }
-        public string Note { get; set; }
     }
 }

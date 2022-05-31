@@ -16,5 +16,6 @@ namespace MovieSuggestion.Core.Services
         Task<User> DeleteUser(User User);
 
         Task<string> Login(string Email, string password);
+        Task<bool> CreateUserPermission(ulong id);
     }
 }

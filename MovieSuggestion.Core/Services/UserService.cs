@@ -21,25 +21,41 @@ namespace MovieSuggestion.Core.Services
 
         public async Task<User> CreateUser(User newUser)
         {
-            await _unitOfWork.UserPermissions.AddRangeAsync( new List<UserPermission> 
+            //Get hash of the password
+            newUser.Password = ClaimPrincipal.HashPassword(newUser.Password);
+            await _unitOfWork.Users.AddAsync(newUser);
+            await _unitOfWork.CommitAsync();
+            return newUser;
+        }
+
+        public async Task<bool> CreateUserPermission(ulong userId)
+        {
+            try
+            {
+                await _unitOfWork.UserPermissions.AddRangeAsync(new List<UserPermission>
             {
                 new UserPermission()
             {
-                UserId = newUser.Id,
+                UserId = userId,
                 Status = EntityStatus.Values.ACTIVE,
                 Permission = Permission.Values.USER_MANAGE
             },
             new UserPermission()
             {
-                UserId = newUser.Id,
+                UserId = userId,
                 Status = EntityStatus.Values.ACTIVE,
                 Permission = Permission.Values.MOVIE_MANAGE
             }
             });
+                await _unitOfWork.CommitAsync();
+                return true;
+            }
+            catch (Exception)
+            {
 
-            await _unitOfWork.Users.AddAsync(newUser);
-            await _unitOfWork.CommitAsync();
-            return newUser;
+                throw;
+            }
+ 
         }
 
         public async Task<User> DeleteUser(User user)
@@ -66,7 +82,7 @@ namespace MovieSuggestion.Core.Services
             //Find the user
             var user = await Task.FromResult(_unitOfWork.Users.Find(_ => _.Email == email ).FirstOrDefault());
             if (user == null)
-                return null;
+                throw new InvalidOperationException(Resource.USERNAME_OR_PASSWORD_INCORRECT);
 
             //Verify password
             if (!ClaimPrincipal.VerifyPassword(password, user.Password))

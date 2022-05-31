@@ -36,28 +36,58 @@ namespace MovieSuggestion.Api.Controllers
         public async Task<ActionResult<List<MovieDTO>>> GetMovieList(int? Skip, int? Take)
         {
             var movieList = await _movieService.GetAllMovies(Skip, Take);
-            return _mapper.Map<IEnumerable<Movie>, List<MovieDTO>>(movieList.Result);
+            return _mapper.Map<List<Movie>, List<MovieDTO>>(movieList.Result);
         }
 
         [HttpGet]
         [MovieAuthorize(UP.MOVIE_MANAGE)]
         public async Task<ActionResult<UserMovieDTO>> GetMovieById(ulong id)
         {
+            var movie = await _movieService.GetMovieById(id);
+            var movieDTO = _mapper.Map<Movie, MovieDTO>(movie);
+            var userMovieDTO = new UserMovieDTO() { Movie = movieDTO };
+            userMovieDTO.NoteList = await _userMovieNoteService.GetUserMovieNotesByMovieId(id);
             var userMovie = await _userMovieService.GetUserMovieByMovieId(id);
-            userMovie.NoteList = await _userMovieNoteService.GetUserMovieNotesByMovieId(id); 
-            return _mapper.Map<UserMovie, UserMovieDTO>(userMovie);
+            if (userMovie != null)
+                userMovieDTO.UserScore = userMovie.Score;
+            return userMovieDTO;
         }
 
+
+        [HttpPost]
+        [MovieAuthorize(UP.MOVIE_MANAGE)]
+        public async Task<ActionResult<UserMovieDTO>> CreateUserMovie([FromBody] UserMovieCreateDTO movieDTO)
+        {
+            var movie = _mapper.Map<UserMovieCreateDTO, UserMovie>(movieDTO);
+            var newMovie = await _userMovieService.CreateUserMovie(movie);
+            return _mapper.Map<UserMovie, UserMovieDTO>(newMovie);
+        }
 
         [HttpPut]
         [MovieAuthorize(UP.MOVIE_MANAGE)]
-        public async Task<ActionResult<MovieDTO>> CreateUserMovie([FromBody] UserMovieCreateDTO movieDTO)
+        public async Task<ActionResult<UserMovieDTO>> UpdateUserMovie([FromBody] UserMovieUpdateDTO movieDTO)
         {
-            var movie = _mapper.Map<UserMovieCreateDTO, Movie>(movieDTO); //todo
-            var newMovie = await _movieService.UpdateMovie(movie);
-            return _mapper.Map<Movie, MovieDTO>(newMovie);
+            var userMovie = _mapper.Map<UserMovieUpdateDTO, UserMovie>(movieDTO);
+            var newuserMovie = await _userMovieService.UpdateUserMovie(userMovie);
+            return _mapper.Map<UserMovie, UserMovieDTO>(newuserMovie);
         }
 
-   
+        [HttpPost]
+        [MovieAuthorize(UP.MOVIE_MANAGE)]
+        public async Task<ActionResult<UserMovieNoteDTO>> AddNoteToMovie([FromBody] UserMovieNoteDTO movieDTO)
+        {
+            var userMovieNote = _mapper.Map<UserMovieNoteDTO, UserMovieNote>(movieDTO);
+            var newUserMovieNote = await _userMovieNoteService.CreateUserMovieNote(userMovieNote);
+            return _mapper.Map<UserMovieNote, UserMovieNoteDTO>(newUserMovieNote);
+        }
+
+        [HttpPost]
+        [MovieAuthorize(UP.MOVIE_MANAGE)]
+        public ActionResult<bool> SuggestMovie([FromBody] SuggestMovieDTO suggestMovieDTO)
+        {
+           return  _movieService.SuggestMovie(suggestMovieDTO.MailTo, suggestMovieDTO.Subject, suggestMovieDTO.Body);
+       
+        }
+
     }
 }

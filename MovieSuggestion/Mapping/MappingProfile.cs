@@ -18,6 +18,7 @@ namespace MovieSuggestion.Api.Mapping
             CreateMap<UserMovie, UserMovieDTO>().ReverseMap();
             CreateMap<UserMovie, UserMovieUpdateDTO>().ReverseMap();
             CreateMap<UserMovie, UserMovieCreateDTO>().ReverseMap();
+            CreateMap<Movie, MovieDTO>().ReverseMap();
 
         }
     }

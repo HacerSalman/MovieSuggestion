@@ -31,6 +31,7 @@ namespace MovieSuggestion.Api.Controllers
         {
             var UserToCreate = _mapper.Map<UserCreateDTO, User>(userDTO);
             var newUser = await _userService.CreateUser(UserToCreate);
+            await _userService.CreateUserPermission(newUser.Id);
             return _mapper.Map<User, UserDTO>(newUser);
         }
 
@@ -65,6 +66,12 @@ namespace MovieSuggestion.Api.Controllers
         {
             var user = await _userService.GetUserById(userId);
             return _mapper.Map<User, UserDTO>(await _userService.DeleteUser(user));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<string>> Login(LoginDTO loginDTO)
+        {
+            return await _userService.Login(loginDTO.Email, loginDTO.Password);
         }
     }
 }

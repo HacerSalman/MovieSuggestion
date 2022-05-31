@@ -37,13 +37,6 @@ namespace MovieSuggestion.Job
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             var connString = EnvironmentVariable.GetConfiguration().DbConnection;
-            ServerVersion sv = ServerVersion.AutoDetect(connString);
-            services.AddDbContextPool<MovieDbContext>((serviceProvider, optionsBuilder) =>
-            {
-                optionsBuilder.UseMySql(connString,sv);
-                optionsBuilder.UseInternalServiceProvider(serviceProvider);
-            });
-            services.AddEntityFrameworkMySql();
            
 
             GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 });

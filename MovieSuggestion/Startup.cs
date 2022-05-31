@@ -2,25 +2,17 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using MovieSuggestion.Core.Services;
-using MovieSuggestion.Core.UnitOfWorks;
+using MovieSuggestion.Api.Internal;
 using MovieSuggestion.Core.Utils;
-using MovieSuggestion.Data.Contexts;
 using MovieSuggestion.Data.Utils.MovieSuggestion.Core.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace MovieSuggestion
 {
@@ -38,15 +30,8 @@ namespace MovieSuggestion
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddControllers();
-            var connString = EnvironmentVariable.GetConfiguration().DbConnection;
-            ServerVersion sv = ServerVersion.AutoDetect(connString);
-            services.AddDbContextPool<MovieDbContext>((serviceProvider, optionsBuilder) =>
-            {
-                optionsBuilder.UseMySql(connString, sv);
-                optionsBuilder.UseInternalServiceProvider(serviceProvider);
-            });
 
-
+            #region jwt
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -68,6 +53,9 @@ namespace MovieSuggestion
                    options.IncludeErrorDetails = true;
                });
 
+            #endregion
+
+            #region swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MovieSuggestion.Api", Version = "v1" });
@@ -92,6 +80,20 @@ namespace MovieSuggestion
                 }
                 });
             });
+            #endregion
+
+            #region responseWrapperMiddleware
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new ResponseWrapperFilter());
+
+            }).AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver { NamingStrategy = new CamelCaseNamingStrategy() };
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+            #endregion
+
             services.AddHttpContextAccessor();
             services.AddDIRegister();
             services.AddAutoMapper(typeof(Startup));
@@ -111,6 +113,7 @@ namespace MovieSuggestion
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
