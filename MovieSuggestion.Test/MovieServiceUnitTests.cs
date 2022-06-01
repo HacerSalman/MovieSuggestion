@@ -31,22 +31,17 @@ namespace MovieSuggestion.Test
                                          };
 
             Mock<IRepository<Movie>> mock = new Mock<IRepository<Movie>>();
-
-
-
             Mock<IUnitOfWork> unitOfWork = new Mock<IUnitOfWork>();
-
-   
-
       
             unitOfWork.Setup(m => m.Movies).Returns(mock.Object);
             //Here we are going to mock repository GetAll method 
             unitOfWork.Setup(m => m.Movies.GetAllAsync().Result).Returns(movieList);
             unitOfWork.Setup(m => m.Movies.Find(_ => _.Status == EntityStatus.Values.ACTIVE)).Returns(movieList);
-            unitOfWork.Setup(m => m.Movies.Find(_ => _.Title.Contains(It.IsAny<string>()))).Returns((string target) =>
+            unitOfWork.Setup(m => m.Movies.GetByIdAsync(It.IsAny<ulong>()).Result).Returns((ulong target) =>
             {
-                return movieList.Where(_ => _.Title.Contains(target)).ToList();
+                return movieList.Where(_ => _.Id == target).FirstOrDefault();
             });
+      
             //Here we are going to mock repository Add method
             unitOfWork.Setup(m => m.Movies.AddAsync(It.IsAny<Movie>()).Result).Returns((Movie target) =>
             {
@@ -96,8 +91,8 @@ namespace MovieSuggestion.Test
                 SourceId = 4
                 
             }).Result;
-            var result = movieService.GetMoviesByTitle(movieName,0,20).Result.Result;
-            Assert.True(result.Count > 0);
+            var result = movieService.GetMovieById(movie.Id).Result;
+            Assert.AreEqual(movieName, result.Title);
         }
 
 
@@ -111,9 +106,9 @@ namespace MovieSuggestion.Test
         [Test]
         public void UpdateMovie()
         {
-            var movieTitle = "UnitTest2";
+            ulong movieId = 2;
             var updateMovieTitle = "UnitTest5";
-            var movie = movieService.GetMoviesByTitle(movieTitle,0,20).Result.Result[0];
+            var movie = movieService.GetMovieById(movieId).Result;
             movie.Title = updateMovieTitle;
             var result = movieService.UpdateMovie(movie).Result;
             Assert.AreEqual(updateMovieTitle, result.Title);
@@ -128,18 +123,10 @@ namespace MovieSuggestion.Test
         }
 
         [Test]
-        public void GetMovieByName()
-        {
-            var movieName = "UnitTest3";
-            var result = movieService.GetMoviesByTitle(movieName,0,20).Result.Result;
-            Assert.True(result.Count > 0);
-        }
-
-        [Test]
         public void DeleteMovie()
         {
-            var movieName = "UnitTest3";
-            var movie = movieService.GetMoviesByTitle(movieName,0,20).Result.Result[0];
+            ulong movieId = 2;
+            var movie = movieService.GetMovieById(movieId).Result;
             var result = movieService.DeleteMovie(movie).Result;
             Assert.AreEqual(EntityStatus.Values.DELETED, result.Status);
         }
