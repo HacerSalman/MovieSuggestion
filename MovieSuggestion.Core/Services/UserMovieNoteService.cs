@@ -22,7 +22,7 @@ namespace MovieSuggestion.Core.Services
         public async Task<UserMovieNote> CreateUserMovieNote(UserMovieNote newUserMovieNote)
         {
             await _unitOfWork.UserMovieNotes.AddAsync(newUserMovieNote);
-            await _unitOfWork.CommitAsync();
+            _unitOfWork.Commit();
             return newUserMovieNote;
         }
 
@@ -30,7 +30,7 @@ namespace MovieSuggestion.Core.Services
         {
             userMovieNote.Status = EntityStatus.Values.DELETED;
             await _unitOfWork.UserMovieNotes.Update(userMovieNote);
-            await _unitOfWork.CommitAsync();
+            _unitOfWork.Commit();
             return userMovieNote;
         }
 
@@ -62,7 +62,7 @@ namespace MovieSuggestion.Core.Services
         public async Task<UserMovieNote> UpdateUserMovieNote(UserMovieNote userMovieNote)
         {
             await _unitOfWork.UserMovieNotes.Update(userMovieNote);
-            await _unitOfWork.CommitAsync();
+            _unitOfWork.Commit();
             return userMovieNote;
         }
     }

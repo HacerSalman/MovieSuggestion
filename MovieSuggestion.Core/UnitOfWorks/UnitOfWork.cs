@@ -40,10 +40,9 @@ namespace MovieSuggestion.Core.UnitOfWorks
         public IRepository<UserMovie> UserMovies => _userMovieRepository = _userMovieRepository ?? new Repository<UserMovie>(_context, _httpContextAccessor);
 
         public IRepository<UserMovieNote> UserMovieNotes => _userMovieNoteRepository = _userMovieNoteRepository ?? new Repository<UserMovieNote>(_context, _httpContextAccessor);
-        public async Task<int> CommitAsync()
-        {          
-         
-            return await _context.SaveChangesAsync();
+        public int Commit()
+        {                 
+            return  _context.SaveChanges();
         }
  
         public void Dispose()

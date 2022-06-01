@@ -20,10 +20,7 @@ namespace MovieSuggestion.Core.Utils
         {
             var connString = EnvironmentVariable.GetConfiguration().DbConnection;
             ServerVersion sv = ServerVersion.AutoDetect(connString);
-            services.AddDbContextPool<MovieDbContext>((serviceProvider, optionsBuilder) =>
-            {
-                optionsBuilder.UseMySql(connString, sv);
-            });
+            services.AddDbContext<MovieDbContext>(options => options.UseMySql(connString, sv), ServiceLifetime.Scoped);
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IUserService, UserService>();

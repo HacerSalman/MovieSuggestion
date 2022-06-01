@@ -37,7 +37,7 @@ namespace MovieSuggestion.Job
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             var connString = EnvironmentVariable.GetConfiguration().DbConnection;
-           
+            services.AddDIRegister();
 
             GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 });
 
@@ -51,7 +51,7 @@ namespace MovieSuggestion.Job
             });
             services.AddHangfireServer();
             services.AddControllers();
-            services.AddDIRegister();
+          
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -23,7 +23,7 @@ namespace MovieSuggestion.Core.Services
         public async Task<UserMovie> CreateUserMovie(UserMovie newUserMovie)
         {
             await _unitOfWork.UserMovies.AddAsync(newUserMovie);
-            await _unitOfWork.CommitAsync();
+            _unitOfWork.Commit();
             return newUserMovie;
         }
 
@@ -31,7 +31,7 @@ namespace MovieSuggestion.Core.Services
         {
             userMovie.Status = EntityStatus.Values.DELETED;
             await _unitOfWork.UserMovies.Update(userMovie);
-            await _unitOfWork.CommitAsync();
+            _unitOfWork.Commit();
             return userMovie;
         }
 
@@ -63,7 +63,7 @@ namespace MovieSuggestion.Core.Services
         public async Task<UserMovie> UpdateUserMovie(UserMovie userMovie)
         {
             await _unitOfWork.UserMovies.Update(userMovie);
-            await _unitOfWork.CommitAsync();
+            _unitOfWork.Commit();
             return userMovie;
         }
     }

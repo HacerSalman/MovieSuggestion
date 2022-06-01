@@ -24,7 +24,7 @@ namespace MovieSuggestion.Core.Services
             //Get hash of the password
             newUser.Password = ClaimPrincipal.HashPassword(newUser.Password);
             await _unitOfWork.Users.AddAsync(newUser);
-            await _unitOfWork.CommitAsync();
+            _unitOfWork.Commit();
             return newUser;
         }
 
@@ -47,7 +47,7 @@ namespace MovieSuggestion.Core.Services
                 Permission = Permission.Values.MOVIE_MANAGE
             }
             });
-                await _unitOfWork.CommitAsync();
+                _unitOfWork.Commit();
                 return true;
             }
             catch (Exception)
@@ -62,7 +62,7 @@ namespace MovieSuggestion.Core.Services
         {
             user.Status = EntityStatus.Values.DELETED;
             await _unitOfWork.Users.Update(user);
-            await _unitOfWork.CommitAsync();
+            _unitOfWork.Commit();
             return user;
         }
 
@@ -99,7 +99,7 @@ namespace MovieSuggestion.Core.Services
         public async Task<User> UpdateUser(User User)
         {
             await _unitOfWork.Users.Update(User);
-            await _unitOfWork.CommitAsync();
+            _unitOfWork.Commit();
             return User;
         }
     }

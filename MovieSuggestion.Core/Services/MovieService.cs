@@ -23,7 +23,7 @@ namespace MovieSuggestion.Core.Services
         public async Task<Movie> CreateMovie(Movie newMovie)
         {
             await _unitOfWork.Movies.AddAsync(newMovie);
-            await _unitOfWork.CommitAsync();
+             _unitOfWork.Commit();
             return newMovie;
         }
 
@@ -31,7 +31,7 @@ namespace MovieSuggestion.Core.Services
         {
             movie.Status = EntityStatus.Values.DELETED;
             await _unitOfWork.Movies.Update(movie);
-            await _unitOfWork.CommitAsync();
+            _unitOfWork.Commit();
             return movie;
         }
 
@@ -74,7 +74,7 @@ namespace MovieSuggestion.Core.Services
         public async Task<Movie> UpdateMovie(Movie movie)
         {
             await _unitOfWork.Movies.Update(movie);
-            await _unitOfWork.CommitAsync();
+            _unitOfWork.Commit();
             return movie;
         }
 
@@ -118,18 +118,17 @@ namespace MovieSuggestion.Core.Services
                 try
                 {
                     var mv = _unitOfWork.Movies.Find(m => m.SourceId == movie.SourceId).FirstOrDefault();
-                    if (mv != null)
-                         _unitOfWork.Movies.Update(movie);
-                    else
-                         _unitOfWork.Movies.AddAsync(movie);
-
-                    _unitOfWork.CommitAsync();
+                    if (mv == null)
+                    {
+                        var createdMovie = _unitOfWork.Movies.AddAsync(movie).Result;
+                        _unitOfWork.Commit();
+                    }               
+                  
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-
                     throw;
-                }
+                }           
              
             }
 
