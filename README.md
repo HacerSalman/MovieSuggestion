@@ -5,12 +5,12 @@ The solution contains 5 different projects. They are Api,Job,Data,Core and Test.
 Api contains web api endpoints.
 Job is a background job application for get all movies from an online movie site.
 Data contains entities,enums,context and migrations.
-Core contains repositories, unitOfWork, services and utils.
+Core contains repositories, unitOfWork, services, clients, DTO, models and utils.
 Test contains unit tests for services methods.
-To run these projects on your own computer, add the MOVIE_SUGGESTION_DB_CONNECTION, MOVIE_SUGGESTION_JWT_KEY, MOVIE_SUGGESTION_VALID_ISSUER, MOVIE_SUGGESTION_VALID_AUDIENCE
-variables to the environmet variables and add the connection string of the mysql database you set on your computer as the value. After that write  
-`dotnet ef database update`
-command to Package Manager Console Window for generate database tables.
+To run these projects on your own computer, add the MOVIE_SUGGESTION_DB_CONNECTION, MOVIE_SUGGESTION_JWT_KEY, 
+MOVIE_SUGGESTION_VALID_ISSUER, MOVIE_SUGGESTION_VALID_AUDIENCE variables to the environmet variables and add 
+the connection string of the mysql database you set on your computer as the value. 
+After that write  `dotnet ef database update` command to Package Manager Console Window for generate database tables.
 
 ## Architecture
 This repository uses Repository Patterns and UnitOfWork. Also uses Interface Segregation and Single Responsibility SOLID principles.
