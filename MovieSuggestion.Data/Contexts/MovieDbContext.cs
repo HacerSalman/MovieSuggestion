@@ -35,12 +35,13 @@ namespace MovieSuggestion.Data.Contexts
 
         public override int SaveChanges()
         {
+            OnBeforeSaveChanges();
             var result = base.SaveChanges();
-            OnAfterSaveChanges();
+           
             return result;
         }
 
-        private void OnAfterSaveChanges()
+        private void OnBeforeSaveChanges()
         {
             foreach (var entry in ChangeTracker.Entries())
             {
