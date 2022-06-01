@@ -19,4 +19,4 @@ thus becoming compatible with the Interface Segregation Principle.Thanks to the 
 principle is followed by using a separate method for each process.
 
 ## Used technologies
-.Net 5, Entity Framework, AutoMapper, Pomelo, Repository Pattern, UnitOfWork, Nunit, Moq, MySql, Hangfire, Jwt, Swagger
+.Net 5, Entity Framework, AutoMapper, Pomelo, Repository Pattern, UnitOfWork, Nunit, Moq, MySql, Hangfire, Jwt, Swagger Fluent Api
