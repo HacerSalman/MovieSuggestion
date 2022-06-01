@@ -2,7 +2,7 @@
 
 ## Getting Started
 The solution contains 5 different projects. They are Api,Job,Data,Core and Test.
-Api contains web api endpoints.
+Api project contains Rest api endpoints.
 Job is a background job application for get all movies from an online movie site.
 Data contains entities,enums,context and migrations.
 Core contains repositories, unitOfWork, services, clients, DTO, models and utils.
