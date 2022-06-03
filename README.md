@@ -2,7 +2,7 @@
 
 ## Getting Started
 The solution contains 5 different projects. They are Api,Job,Data,Core and Test.
-Api contains web api endpoints.
+Api project contains Rest api endpoints.
 Job is a background job application for get all movies from an online movie site.
 Data contains entities,enums,context and migrations.
 Core contains repositories, unitOfWork, services, clients, DTO, models and utils.
@@ -19,4 +19,4 @@ thus becoming compatible with the Interface Segregation Principle.Thanks to the 
 principle is followed by using a separate method for each process.
 
 ## Used technologies
-.Net 5, Entity Framework, AutoMapper, Pomelo, Repository Pattern, UnitOfWork, Nunit, Moq, MySql, Hangfire, Jwt, Swagger
+.Net 5, Entity Framework, AutoMapper, Pomelo, Repository Pattern, UnitOfWork, Nunit, Moq, MySql, Hangfire, Jwt, Swagger, Fluent Api
