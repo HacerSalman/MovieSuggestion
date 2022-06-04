@@ -11,6 +11,7 @@ To run these projects on your own computer, add the MOVIE_SUGGESTION_DB_CONNECTI
 MOVIE_SUGGESTION_VALID_ISSUER, MOVIE_SUGGESTION_VALID_AUDIENCE variables to the environmet variables and add 
 the connection string of the mysql database you set on your computer as the value. 
 After that write  `dotnet ef database update` command to Package Manager Console Window for generate database tables.
+You can add jwt token to swagger and call endpoints
 
 ## Architecture
 This repository uses Repository Patterns and UnitOfWork. Also uses Interface Segregation and Single Responsibility SOLID principles.
@@ -20,6 +21,3 @@ principle is followed by using a separate method for each process.
 
 ## Used technologies
 .Net 5, Entity Framework, AutoMapper, Pomelo, Repository Pattern, UnitOfWork, Nunit, Moq, MySql, Hangfire, Jwt, Swagger, Fluent Api
-
-
-![image](https://user-images.githubusercontent.com/20662989/172023633-ff737813-5944-425c-bd7e-0397e89f819c.png)
