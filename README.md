@@ -20,3 +20,6 @@ principle is followed by using a separate method for each process.
 
 ## Used technologies
 .Net 5, Entity Framework, AutoMapper, Pomelo, Repository Pattern, UnitOfWork, Nunit, Moq, MySql, Hangfire, Jwt, Swagger, Fluent Api
+
+
+![image](https://user-images.githubusercontent.com/20662989/172023633-ff737813-5944-425c-bd7e-0397e89f819c.png)
